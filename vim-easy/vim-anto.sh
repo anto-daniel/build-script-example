@@ -1,6 +1,6 @@
 #!/bin/bash 
 
-PACKAGE=vim-anto
+PACKAGE=vim-easy
 VERSION="0.0.1"
 
 mkdir -p pkgroot/tmp
