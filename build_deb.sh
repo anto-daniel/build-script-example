@@ -1,4 +1,4 @@
-#! /bin/bash
+#!/bin/bash
 #set -x
 
 sudo rm -rf build/

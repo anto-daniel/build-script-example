@@ -121,7 +121,7 @@ syn on
 " Mouse {{{
 " Send more characters for redraws
 set ttyfast
- 
+
 " Enable mouse use in all modes
 set mouse=a
  
@@ -130,12 +130,14 @@ set mouse=a
 set ttymouse=xterm2
 " }}}
 " Disable arrow keys {{{
-noremap <Up> <NOP>
-inoremap <Down> <NOP>
-inoremap <Left> <NOP>
-inoremap <Right> <NOP>
-noremap <Up> <NOP>
-noremap <Down> <NOP>
-noremap <Left> <NOP>
-noremap <Right> <NOP>
+" noremap <Up> <NOP>
+" inoremap <Down> <NOP>
+" inoremap <Left> <NOP>
+" inoremap <Right> <NOP>
+" noremap <Up> <NOP>
+" noremap <Down> <NOP>
+" noremap <Left> <NOP>
+" noremap <Right> <NOP>
 " }}}:
+
+execute pathogen#infect()
