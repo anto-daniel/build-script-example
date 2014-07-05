@@ -1,20 +1,24 @@
 #!/bin/bash
 
+hostname=$(hostname -f)
+nginx_html_dir="/srv/www/$hostname"
+
 apt-get update
 apt-get upgrade -y
 apt-get install nginx spawn-fcgi fcgiwrap curl -y
 
-mkdir -p /srv/www/nginx.example.com/public_html
-mkdir -p /srv/www/nginx.example.com/logs
-chown -R www-data:www-data /srv/www/nginx.example.com
+mkdir -p $nginx_html_dir/public_html
+mkdir -p $nginx_html_dir/logs
+chown -R www-data:www-data $nginx_html_dir
 
-cat > /etc/nginx/sites-available/nginx.example.com <<EOM
+build_conf_file() {
+cat > /etc/nginx/sites-available/$hostname <<EOM
 server {
     listen   80;
-    server_name nginx.example.com example.com;
-    access_log /srv/www/nginx.example.com/logs/access.log;
-    error_log /srv/www/nginx.example.com/logs/error.log;
-    root   /srv/www/nginx.example.com/public_html;
+    server_name $hostname;
+    access_log $nginx_html_dir/logs/access.log;
+    error_log $nginx_html_dir/logs/error.log;
+    root   $nginx_html_dir/public_html;
 
     location / {
         index  index.html index.htm;
@@ -25,19 +29,23 @@ server {
         include /etc/nginx/fastcgi_params;
         fastcgi_pass unix:/var/run/fcgiwrap.socket;
         fastcgi_index index.pl;
-        fastcgi_param SCRIPT_FILENAME /srv/www/nginx.example.com/public_html\$fastcgi_script_name;
+        fastcgi_param SCRIPT_FILENAME $nginx_html_dir/public_html\$fastcgi_script_name;
     }
 }
 
 EOM
 
+}
+
 cd /etc/nginx/sites-enabled/
-ln -s /etc/nginx/sites-available/nginx.example.com
+ln -s /etc/nginx/sites-available/$hostname
 
 /etc/init.d/fcgiwrap start
 /etc/init.d/nginx start
 
-cat > /srv/www/nginx.example.com/public_html/test.pl <<EOM
+build_perl_file() {
+
+cat > $nginx_html_dir/public_html/test.pl <<EOM
 #!/usr/bin/perl
 
 print "Content-type:text/html\n\n";
@@ -55,6 +63,11 @@ print "</body></html>";
 
 EOM
 
-chmod a+x /srv/www/nginx.example.com/public_html/test.pl
+}
 
+
+build_conf_file
+build_perl_file
+
+chmod a+x $nginx_html_dir/public_html/test.pl
 curl http://localhost/test.pl
