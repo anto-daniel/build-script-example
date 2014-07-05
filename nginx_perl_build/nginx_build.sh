@@ -57,4 +57,4 @@ EOM
 
 chmod a+x /srv/www/nginx.example.com/public_html/test.pl
 
-curl http://localhost/index.pl
+curl http://localhost/test.pl
