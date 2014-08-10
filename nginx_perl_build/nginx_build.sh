@@ -38,6 +38,7 @@ EOM
 }
 
 cd /etc/nginx/sites-enabled/
+rm -rfv /etc/nginx/sites-enabled/*
 ln -s /etc/nginx/sites-available/$hostname
 
 /etc/init.d/fcgiwrap start
@@ -69,5 +70,6 @@ EOM
 build_conf_file
 build_perl_file
 
+chown www-data:www-data $nginx_html_dir/public_html/test.pl
 chmod a+x $nginx_html_dir/public_html/test.pl
 curl http://localhost/test.pl
