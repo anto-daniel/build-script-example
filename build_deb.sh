@@ -17,18 +17,18 @@ KANSODIR="./node_modules/kanso"
 mkdir -p $BUILDROOT/DEBIAN
 mkdir -p $BUILDDIR
   
-   npm_and_kanso_install() {
+npm_and_kanso_install() {
  	
-        OLDDIR=`pwd`
+    OLDDIR=`pwd`
 	cd $PROJECT
 	npm install
 	$KANSODIR/bin/kanso install
 	cd $OLDDIR
 	cp -dpR $PROJECT/node_modules $BUILDDIR/
 	cp -dpR $PROJECT/packages $BUILDDIR/
-   } 
+} 
 
-   copy_project_files_to_build_dir() {
+copy_project_files_to_build_dir() {
 
 	for file in `cat $PROJECT/kanso.json | egrep "\"attachments\": \[|modules" | awk -F: '{print $2}' | sed 's/\[//g;s/\"/\ /g;s/\]//g;s/\,//g'`
 	do
@@ -42,7 +42,7 @@ mkdir -p $BUILDDIR
 	done
 	#ls -l ${PROJECT} | awk '{print $9}' | egrep -v "conf|^$" | xargs -I {} cp -dpR ${PROJECT}/{} $BUILDDIR
 	rsync -a --exclude conf ${PROJECT}/ $BUILDDIR
-   }
+}
 
 copy_project_files_to_build_dir
 npm_and_kanso_install
